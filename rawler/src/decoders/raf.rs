@@ -7,6 +7,7 @@ use std::f32::NAN;
 use std::io::Cursor;
 use std::io::SeekFrom;
 use std::mem::size_of;
+use std::rc::Rc;
 
 use crate::alloc_image;
 use crate::alloc_image_plain;
@@ -43,6 +44,7 @@ use super::Decoder;
 use super::FormatHint;
 use super::RawDecodeParams;
 use super::RawMetadata;
+use super::WellKnownIFD;
 
 mod dbp;
 mod fuji_decompressor;
@@ -418,6 +420,10 @@ impl<'a> Decoder for RafDecoder<'a> {
     }
     let mdata = RawMetadata::new(&self.camera, exif);
     Ok(mdata)
+  }
+
+  fn ifd(&self, _wk_ifd: WellKnownIFD) -> Result<Option<Rc<IFD>>> {
+    Ok(Some(Rc::new(self.ifd.clone())))
   }
 
   fn xpacket(&self, file: &mut RawFile, _params: RawDecodeParams) -> Result<Option<Vec<u8>>> {
