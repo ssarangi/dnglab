@@ -135,6 +135,7 @@ pub struct RawDecodeParams {
 pub enum WellKnownIFD {
   Root,
   Raw,
+  Raf,
   Preview,
   Exif,
   ExifGps,

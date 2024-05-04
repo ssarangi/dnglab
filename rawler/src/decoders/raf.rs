@@ -422,10 +422,6 @@ impl<'a> Decoder for RafDecoder<'a> {
     Ok(mdata)
   }
 
-  fn ifd(&self, _wk_ifd: WellKnownIFD) -> Result<Option<Rc<IFD>>> {
-    Ok(Some(Rc::new(self.ifd.clone())))
-  }
-
   fn xpacket(&self, file: &mut RawFile, _params: RawDecodeParams) -> Result<Option<Vec<u8>>> {
     let jpeg_buf = self.read_embedded_jpeg(file)?;
     let mut cur = Cursor::new(jpeg_buf);
@@ -454,6 +450,13 @@ impl<'a> Decoder for RafDecoder<'a> {
 
   fn format_hint(&self) -> FormatHint {
     FormatHint::RAF
+  }
+
+  fn ifd(&self, wk_ifd: WellKnownIFD) -> Result<Option<Rc<IFD>>> {
+    Ok(match wk_ifd {
+      WellKnownIFD::Raf => Some(Rc::new(self.ifd.clone())),
+      _ => None,
+    })
   }
 }
 
