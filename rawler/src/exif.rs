@@ -165,6 +165,8 @@ impl Exif {
           (ExifTag::UserComment, Value::Ascii(data)) => self.user_comment = data.strings().get(0).map(trim),
           (ExifTag::ExifImageWidth, Value::Long(data)) => self.image_width = data.get(0).cloned(),
           (ExifTag::ExifImageHeight, Value::Long(data)) => self.image_height = data.get(0).cloned(),
+          (ExifTag::LensMake, Value::Ascii(data)) => self.lens_make = data.strings().get(0).map(trim),
+          (ExifTag::LensModel, Value::Ascii(data)) => self.lens_model = data.strings().get(0).map(trim),
           //(ExifTag::MakerNotes, Value::Undefined(data)) => self.makernotes = Some(data.clone()),
           (tag, _value) => {
             log::debug!("Ignoring EXIF tag: {:?}", tag);
