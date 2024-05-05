@@ -58,6 +58,8 @@ pub struct Exif {
   pub lens_model: Option<String>,
   pub gps: Option<ExifGPS>,
   pub user_comment: Option<String>,
+  pub image_width: Option<u32>,
+  pub image_height: Option<u32>,
   //pub makernotes: Option<Vec<u8>>,
 }
 
@@ -161,6 +163,8 @@ impl Exif {
           (ExifTag::SerialNumber, Value::Ascii(data)) => self.serial_number = data.strings().get(0).map(trim),
           (ExifTag::LensSerialNumber, Value::Ascii(data)) => self.lens_serial_number = data.strings().get(0).map(trim),
           (ExifTag::UserComment, Value::Ascii(data)) => self.user_comment = data.strings().get(0).map(trim),
+          (ExifTag::ExifImageWidth, Value::Long(data)) => self.image_width = data.get(0).cloned(),
+          (ExifTag::ExifImageHeight, Value::Long(data)) => self.image_height = data.get(0).cloned(),
           //(ExifTag::MakerNotes, Value::Undefined(data)) => self.makernotes = Some(data.clone()),
           (tag, _value) => {
             log::debug!("Ignoring EXIF tag: {:?}", tag);
